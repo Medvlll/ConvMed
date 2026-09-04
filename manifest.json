@@ -1,15 +1,19 @@
 {
-  "name": "ConvMed",
-  "short_name": "ConvMed",
-  "start_url": "/",
-  "display": "standalone",
-  "background_color": "#000000",
-  "theme_color": "#000000",
-  "icons": [
-    {
-      "src": "icon.png",
-      "sizes": "1024x1024",
-      "type": "image/png"
-    }
-  ]
+"name": "ConvMed — Convertisseur EUR IDR MYR",
+"short_name": "ConvMed",
+"description": "Convertisseur simple Euro, Roupie indonésienne et Ringgit malaisien.",
+"start_url": "./",
+"scope": "./",
+"display": "standalone",
+"orientation": "portrait",
+"background_color": "#08080c",
+"theme_color": "#08080c",
+"icons": [
+{
+"src": "icon.png",
+"sizes": "1024x1024",
+"type": "image/png",
+"purpose": "any maskable"
+}
+]
 }
