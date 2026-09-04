@@ -1,33 +1,1099 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <title>ConvMed</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
-  <script defer src="script.js"></script>
-  <link rel="manifest" href="manifest.json">
-  <link rel="apple-touch-icon" href="icon.png">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#08080c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ConvMed">
+
+<title>ConvMed</title>
+
+<style>
+*{box-sizing:border-box}
+
+:root{
+color-scheme:dark;
+--bg:#08080c;
+--line:rgba(255,255,255,.09);
+--muted:#9696a6;
+}
+
+html,body{
+margin:0;
+min-height:100%;
+background:var(--bg);
+}
+
+body{
+font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",
+"SF Pro Text",Inter,sans-serif;
+color:#f7f7fb;
+-webkit-font-smoothing:antialiased;
+background:
+radial-gradient(circle at 10% 0%,rgba(80,70,255,.20),transparent 32%),
+radial-gradient(circle at 100% 45%,rgba(235,45,137,.13),transparent 35%),
+var(--bg);
+}
+
+button,input,select{
+font:inherit;
+}
+
+button{
+-webkit-tap-highlight-color:transparent;
+}
+
+.app{
+width:min(100%,560px);
+min-height:100vh;
+margin:auto;
+padding:
+calc(env(safe-area-inset-top) + 22px)
+18px
+calc(env(safe-area-inset-bottom) + 24px);
+}
+
+/* HEADER */
+
+.top{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:20px;
+}
+
+.brandline{
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+.logo{
+width:44px;
+height:44px;
+flex:none;
+}
+
+.brand{
+font-size:30px;
+font-weight:700;
+letter-spacing:-1.2px;
+}
+
+.brand b{
+background:linear-gradient(90deg,#8d5cff,#ef3f9b,#ff9c3d);
+-webkit-background-clip:text;
+background-clip:text;
+color:transparent;
+}
+
+.sub{
+color:var(--muted);
+font-size:12px;
+margin-top:2px;
+letter-spacing:.5px;
+}
+
+.refresh{
+width:46px;
+height:46px;
+border:1px solid var(--line);
+border-radius:16px;
+background:rgba(255,255,255,.055);
+color:#b88cff;
+font-size:26px;
+}
+
+.refresh:active{
+transform:scale(.94);
+}
+
+/* RATE */
+
+.rate{
+text-align:center;
+padding:17px 14px;
+border:1px solid var(--line);
+border-radius:22px;
+background:rgba(255,255,255,.035);
+margin-bottom:15px;
+}
+
+.dot{
+display:inline-block;
+width:8px;
+height:8px;
+border-radius:50%;
+background:#20dc77;
+box-shadow:0 0 10px #20dc77;
+margin-right:7px;
+}
+
+.rate>span:not(.dot){
+color:#bdbdc9;
+font-size:13px;
+}
+
+.rate strong{
+display:block;
+margin-top:8px;
+font-size:16px;
+}
+
+.rate small{
+display:block;
+color:var(--muted);
+margin-top:6px;
+font-size:11px;
+}
+
+/* CARDS */
+
+.card{
+border:1px solid var(--line);
+border-radius:28px;
+padding:18px 17px 17px;
+box-shadow:0 18px 50px rgba(0,0,0,.18);
+backdrop-filter:blur(20px);
+}
+
+.from{
+background:linear-gradient(
+145deg,
+rgba(52,69,170,.25),
+rgba(20,20,30,.86)
+);
+}
+
+.to{
+background:linear-gradient(
+145deg,
+rgba(166,55,94,.23),
+rgba(20,20,30,.86)
+);
+}
+
+.row{
+display:flex;
+justify-content:space-between;
+color:#aaaab9;
+font-size:13px;
+}
+
+.code{
+font-weight:600;
+letter-spacing:.8px;
+}
+
+.currency{
+display:flex;
+align-items:center;
+gap:11px;
+margin-top:16px;
+min-width:0;
+}
+
+.flag{
+font-size:30px;
+line-height:1;
+}
+
+.name{
+font-weight:600;
+min-width:0;
+white-space:nowrap;
+}
+
+.amount,
+.result{
+margin-left:auto;
+min-width:0;
+width:45%;
+border:0;
+outline:0;
+background:transparent;
+color:#fff;
+text-align:right;
+font-size:31px;
+font-weight:600;
+letter-spacing:-1px;
+}
+
+.amount::selection{
+background:#6e53ff;
+}
+
+.symbol{
+color:#ff9c3d;
+font-size:15px;
+font-weight:700;
+}
+
+/* SELECT + SWAP */
+
+.controls{
+display:grid;
+grid-template-columns:1fr 58px 1fr;
+gap:8px;
+align-items:center;
+position:relative;
+z-index:3;
+margin:8px 0;
+}
+
+.controls select{
+width:100%;
+min-width:0;
+border:1px solid var(--line);
+border-radius:14px;
+background:rgba(12,12,18,.96);
+color:#dcdcea;
+padding:9px 5px;
+font-size:10px;
+outline:none;
+}
+
+.swap{
+width:58px;
+height:58px;
+border-radius:50%;
+border:2px solid rgba(255,255,255,.16);
+background:
+linear-gradient(
+135deg,
+#8b5cff,
+#ed3f9b,
+#ff9c3d
+);
+color:#fff;
+font-size:28px;
+font-weight:700;
+box-shadow:0 10px 30px rgba(122,70,255,.34);
+}
+
+.swap:active{
+transform:scale(.92);
+}
+
+/* QUICK BUTTONS */
+
+.quick{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:8px;
+margin-top:15px;
+}
+
+.quick button{
+border:1px solid var(--line);
+border-radius:14px;
+background:rgba(255,255,255,.045);
+color:#ddddea;
+padding:12px 4px;
+}
+
+.quick button:active{
+background:rgba(139,92,255,.20);
+}
+
+/* INFO */
+
+.error{
+color:#ff7777;
+text-align:center;
+min-height:18px;
+font-size:12px;
+margin:10px 0 0;
+}
+
+.tip{
+display:flex;
+gap:12px;
+align-items:center;
+margin-top:22px;
+padding:15px;
+border:1px solid var(--line);
+border-radius:19px;
+background:rgba(255,255,255,.03);
+}
+
+.tipicon{
+font-size:22px;
+}
+
+.tip b{
+display:block;
+font-size:14px;
+}
+
+.tip span{
+display:block;
+color:var(--muted);
+font-size:12px;
+margin-top:3px;
+}
+
+footer{
+display:flex;
+justify-content:center;
+gap:6px;
+color:#676775;
+font-size:10px;
+margin-top:28px;
+}
+
+.spin{
+animation:spin .45s ease;
+}
+
+@keyframes spin{
+to{
+transform:rotate(360deg);
+}
+}
+
+@media(max-width:380px){
+.brand{
+font-size:27px;
+}
+
+.amount,
+.result{
+font-size:26px;
+}
+
+.name{
+font-size:14px;
+}
+}
+</style>
 </head>
+
 <body>
-  <div class="container">
-    <h1>ConvMed</h1>
-    <div class="card">
-      <label>Montant en €</label>
-      <input type="number" id="eur" placeholder="0" />
-    </div>
-    <div class="card">
-      <label>Taux EUR → IDR (Bali)</label>
-      <input type="number" id="rate_idr" value="17000" />
-      <p class="result" id="result_idr">0 IDR</p>
-    </div>
-    <div class="card">
-      <label>Taux EUR → MYR (Malaisie)</label>
-      <input type="number" id="rate_myr" value="5" />
-      <p class="result" id="result_myr">0 MYR</p>
-    </div>
-  </div>
+
+<main class="app">
+
+<header class="top">
+
+<div class="brandline">
+
+<!-- LOGO CONVMED -->
+<svg class="logo"
+viewBox="0 0 100 100"
+xmlns="http://www.w3.org/2000/svg">
+
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0%" stop-color="#171722"/>
+<stop offset="100%" stop-color="#09090e"/>
+</linearGradient>
+
+<linearGradient id="blue" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0%" stop-color="#586cff"/>
+<stop offset="100%" stop-color="#714cff"/>
+</linearGradient>
+
+<linearGradient id="pink" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0%" stop-color="#ff477f"/>
+<stop offset="100%" stop-color="#ed3f9b"/>
+</linearGradient>
+</defs>
+
+<rect width="100" height="100" rx="25" fill="url(#bg)"/>
+
+<circle cx="34" cy="34" r="22" fill="url(#blue)"/>
+<circle cx="66" cy="66" r="22" fill="url(#pink)"/>
+
+<text x="34"
+y="42"
+text-anchor="middle"
+font-size="25"
+font-family="Arial"
+font-weight="bold"
+fill="white">€</text>
+
+<text x="66"
+y="72"
+text-anchor="middle"
+font-size="18"
+font-family="Arial"
+font-weight="bold"
+fill="white">Rp</text>
+
+<path d="M24 55 C12 48 12 31 23 23"
+fill="none"
+stroke="#ff9c3d"
+stroke-width="5"
+stroke-linecap="round"/>
+
+<path d="M21 22 L21 31 L29 27"
+fill="none"
+stroke="#ff9c3d"
+stroke-width="4"
+stroke-linecap="round"
+stroke-linejoin="round"/>
+
+<path d="M76 45 C88 52 88 69 77 77"
+fill="none"
+stroke="#7b63ff"
+stroke-width="5"
+stroke-linecap="round"/>
+
+<path d="M79 78 L79 69 L71 73"
+fill="none"
+stroke="#7b63ff"
+stroke-width="4"
+stroke-linecap="round"
+stroke-linejoin="round"/>
+
+</svg>
+
+<div>
+<div class="brand">
+<span>Conv</span><b>Med</b>
+</div>
+
+<div class="sub">
+EUR · IDR · MYR
+</div>
+
+</div>
+</div>
+
+<button class="refresh"
+id="refresh"
+aria-label="Actualiser">
+↻
+</button>
+
+</header>
+
+<section class="rate">
+
+<span class="dot"></span>
+<span>Taux de change</span>
+
+<strong id="rate">
+Chargement…
+</strong>
+
+<small id="updated">
+Récupération des taux…
+</small>
+
+</section>
+
+
+<section>
+
+<!-- DE -->
+
+<div class="card from">
+
+<div class="row">
+<span>De</span>
+<span class="code" id="fromCode">EUR</span>
+</div>
+
+<div class="currency">
+
+<span class="flag" id="fromFlag">
+🇪🇺
+</span>
+
+<span class="name" id="fromName">
+Euro
+</span>
+
+<input
+class="amount"
+id="amount"
+inputmode="decimal"
+autocomplete="off"
+value="100"
+aria-label="Montant"
+/>
+
+<span class="symbol"
+id="fromSymbol">
+€
+</span>
+
+</div>
+
+</div>
+
+
+<!-- CONTROLES -->
+
+<div class="controls">
+
+<select id="fromSelect"
+aria-label="Devise de départ">
+</select>
+
+<button class="swap"
+id="swap"
+aria-label="Inverser les devises">
+↕
+</button>
+
+<select id="toSelect"
+aria-label="Devise d'arrivée">
+</select>
+
+</div>
+
+
+<!-- VERS -->
+
+<div class="card to">
+
+<div class="row">
+<span>Vers</span>
+<span class="code" id="toCode">IDR</span>
+</div>
+
+<div class="currency">
+
+<span class="flag" id="toFlag">
+🇮🇩
+</span>
+
+<span class="name" id="toName">
+Roupie indonésienne
+</span>
+
+<output
+class="result"
+id="result">
+—
+</output>
+
+<span class="symbol"
+id="toSymbol">
+Rp
+</span>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- MONTANTS RAPIDES -->
+
+<section class="quick">
+
+<button data-value="10">10</button>
+<button data-value="50">50</button>
+<button data-value="100">100</button>
+<button data-value="500">500</button>
+
+</section>
+
+
+<p class="error"
+id="error">
+</p>
+
+
+<section class="tip">
+
+<div class="tipicon">
+⚡
+</div>
+
+<div>
+
+<b>3 devises, rien de plus</b>
+
+<span>
+Euro, roupie indonésienne et ringgit malaisien.
+</span>
+
+</div>
+
+</section>
+
+
+<footer>
+
+<span>ConvMed</span>
+<span>•</span>
+<span>🇮🇩 Bali · 🇲🇾 Malaisie</span>
+
+</footer>
+
+</main>
+
+
+<script>
+
+const API =
+"https://open.er-api.com/v6/latest/EUR";
+
+const CACHE =
+"convmed_rates_v4";
+
+
+const currencies = {
+
+EUR:{
+name:"Euro",
+flag:"🇪🇺",
+symbol:"€"
+},
+
+IDR:{
+name:"Roupie indonésienne",
+flag:"🇮🇩",
+symbol:"Rp"
+},
+
+MYR:{
+name:"Ringgit malaisien",
+flag:"🇲🇾",
+symbol:"RM"
+}
+
+};
+
+
+let rates = {
+EUR:1,
+IDR:null,
+MYR:null
+};
+
+let from="EUR";
+let to="IDR";
+
+
+const amount =
+document.getElementById("amount");
+
+const result =
+document.getElementById("result");
+
+const rate =
+document.getElementById("rate");
+
+const updated =
+document.getElementById("updated");
+
+const error =
+document.getElementById("error");
+
+const refresh =
+document.getElementById("refresh");
+
+const swap =
+document.getElementById("swap");
+
+const fromSelect =
+document.getElementById("fromSelect");
+
+const toSelect =
+document.getElementById("toSelect");
+
+
+function number(value){
+
+const n =
+Number(
+String(value)
+.replace(/\s/g,"")
+.replace(",",".")
+);
+
+return Number.isFinite(n) && n>=0
+? n
+: 0;
+
+}
+
+
+function format(value,currency){
+
+return new Intl.NumberFormat(
+currency==="EUR"
+? "fr-FR"
+: "id-ID",
+{
+minimumFractionDigits:
+currency==="EUR" ? 2 : 0,
+
+maximumFractionDigits:
+currency==="EUR" ? 2 : 0
+}
+).format(value);
+
+}
+
+
+function updateCard(side,currency){
+
+const data =
+currencies[currency];
+
+document.getElementById(
+side+"Code"
+).textContent=currency;
+
+document.getElementById(
+side+"Flag"
+).textContent=data.flag;
+
+document.getElementById(
+side+"Name"
+).textContent=data.name;
+
+document.getElementById(
+side+"Symbol"
+).textContent=data.symbol;
+
+}
+
+
+function render(){
+
+if(
+rates[from]===null ||
+rates[to]===null
+){
+
+result.textContent="—";
+
+return;
+
+}
+
+const value =
+number(amount.value);
+
+const converted =
+(value / rates[from])
+* rates[to];
+
+
+result.textContent =
+format(converted,to);
+
+
+const rateValue =
+rates[to] / rates[from];
+
+
+rate.textContent =
+`1 ${from} = ${format(rateValue,to)} ${to}`;
+
+}
+
+
+function updateUI(){
+
+updateCard("from",from);
+updateCard("to",to);
+
+fromSelect.value=from;
+toSelect.value=to;
+
+render();
+
+}
+
+
+function populate(){
+
+for(
+const [code,data]
+of Object.entries(currencies)
+){
+
+fromSelect.add(
+new Option(
+`${data.flag} ${data.name} (${code})`,
+code
+)
+);
+
+toSelect.add(
+new Option(
+`${data.flag} ${data.name} (${code})`,
+code
+)
+);
+
+}
+
+updateUI();
+
+}
+
+
+async function loadRates(force=false){
+
+error.textContent="";
+
+refresh.classList.add("spin");
+
+
+/* CACHE */
+
+if(!force){
+
+try{
+
+const cache =
+JSON.parse(
+localStorage.getItem(CACHE)
+);
+
+if(
+cache &&
+cache.rates &&
+cache.rates.IDR &&
+cache.rates.MYR &&
+Date.now()-cache.time
+< 6*60*60*1000
+){
+
+rates=cache.rates;
+
+updated.textContent =
+"Taux enregistrés récemment";
+
+render();
+
+refresh.classList.remove("spin");
+
+return;
+
+}
+
+}catch(e){}
+
+}
+
+
+/* API */
+
+try{
+
+const response =
+await fetch(
+API,
+{cache:"no-store"}
+);
+
+const data =
+await response.json();
+
+if(
+!response.ok ||
+data.result!=="success" ||
+!data.rates.IDR ||
+!data.rates.MYR
+){
+
+throw new Error();
+
+}
+
+
+rates={
+EUR:1,
+IDR:data.rates.IDR,
+MYR:data.rates.MYR
+};
+
+
+localStorage.setItem(
+CACHE,
+JSON.stringify({
+rates:rates,
+time:Date.now()
+})
+);
+
+
+updated.textContent =
+"Mis à jour : "+
+new Date().toLocaleTimeString(
+"fr-FR",
+{
+hour:"2-digit",
+minute:"2-digit"
+}
+);
+
+
+render();
+
+
+}catch(e){
+
+/* FALLBACK CACHE */
+
+try{
+
+const cache =
+JSON.parse(
+localStorage.getItem(CACHE)
+);
+
+if(
+cache &&
+cache.rates &&
+cache.rates.IDR &&
+cache.rates.MYR
+){
+
+rates=cache.rates;
+
+updated.textContent =
+"Taux précédent (hors connexion)";
+
+error.textContent =
+"Connexion indisponible : taux précédent utilisé.";
+
+render();
+
+}else{
+
+throw new Error();
+
+}
+
+}catch(e2){
+
+updated.textContent =
+"Taux indisponibles";
+
+error.textContent =
+"Impossible de récupérer les taux. Vérifie ta connexion.";
+
+}
+
+}
+
+
+refresh.classList.remove("spin");
+
+}
+
+
+/* SAISIE */
+
+amount.addEventListener(
+"input",
+render
+);
+
+
+/* DEVISE DE DEPART */
+
+fromSelect.addEventListener(
+"change",
+()=>{
+
+from=fromSelect.value;
+
+if(from===to){
+
+to =
+from==="EUR"
+? "IDR"
+: "EUR";
+
+}
+
+updateUI();
+
+}
+);
+
+
+/* DEVISE D'ARRIVEE */
+
+toSelect.addEventListener(
+"change",
+()=>{
+
+to=toSelect.value;
+
+if(from===to){
+
+from =
+to==="EUR"
+? "IDR"
+: "EUR";
+
+}
+
+updateUI();
+
+}
+);
+
+
+/* INVERSION */
+
+swap.addEventListener(
+"click",
+()=>{
+
+const oldFrom=from;
+
+from=to;
+to=oldFrom;
+
+updateUI();
+
+}
+);
+
+
+/* ACTUALISATION */
+
+refresh.addEventListener(
+"click",
+()=>loadRates(true)
+);
+
+
+/* BOUTONS RAPIDES */
+
+document
+.querySelectorAll(".quick button")
+.forEach(button=>{
+
+button.addEventListener(
+"click",
+()=>{
+
+amount.value =
+button.dataset.value;
+
+render();
+
+}
+);
+
+});
+
+
+/* START */
+
+populate();
+
+loadRates();
+
+</script>
+
 </body>
 </html>
