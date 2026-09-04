@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>ConvMed</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="script.js"></script>
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+</head>
+<body>
+  <div class="container">
+    <h1>ConvMed</h1>
+    <div class="card">
+      <label>Montant en €</label>
+      <input type="number" id="eur" placeholder="0" />
+    </div>
+    <div class="card">
+      <label>Taux EUR → IDR (Bali)</label>
+      <input type="number" id="rate_idr" value="17000" />
+      <p class="result" id="result_idr">0 IDR</p>
+    </div>
+    <div class="card">
+      <label>Taux EUR → MYR (Malaisie)</label>
+      <input type="number" id="rate_myr" value="5" />
+      <p class="result" id="result_myr">0 MYR</p>
+    </div>
+  </div>
+</body>
+</html>
